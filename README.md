@@ -62,15 +62,7 @@ source $HOME/.bash_profile
 ```
 cd $HOME
 
-rm -rf Cardchain
-
-git clone https://github.com/DecentralCardGame/Cardchain.git
-
-cd Cardchain
-
-git checkout v0.17.0
-
-make install
+wget https://github.com/DecentralCardGame/Cardchain/releases/download/v0.17.0/cardchaind -O $HOME/go/bin/cardchaind
 ```
 ### 🚧 Configurasyonlar
 ```
