@@ -57,7 +57,7 @@ source $HOME/.bash_profile
 Not: Aşağıdaki wallet ve moniker kısmına kendi adınızı giriniz...
 echo "export WALLET="molla202"" >> $HOME/.bash_profile
 echo "export MONIKER="molla202"" >> $HOME/.bash_profile
-echo "export CARDCHAIN_CHAIN_ID="cardtestnet-6"" >> $HOME/.bash_profile
+echo "export CARDCHAIN_CHAIN_ID="cardtestnet-13"" >> $HOME/.bash_profile
 echo "export CARDCHAIN_PORT="31"" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 ```
