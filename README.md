@@ -63,6 +63,7 @@ source $HOME/.bash_profile
 cd $HOME
 
 wget https://github.com/DecentralCardGame/Cardchain/releases/download/v0.17.0/cardchaind -O $HOME/go/bin/cardchaind
+chmod +x $HOME/go/bin/cardchaind
 ```
 ### 🚧 Configurasyonlar
 ```
