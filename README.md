@@ -67,21 +67,21 @@ chmod +x $HOME/go/bin/cardchaind
 ```
 ### 🚧 Configurasyonlar
 ```
-Cardchaind config node tcp://localhost:${CARDCHAIN_PORT}657
-Cardchaind config keyring-backend os
-Cardchaind config chain-id cardtestnet-13
-Cardchaind init "$MONIKER" --chain-id cardtestnet-13
+cardchaind config node tcp://localhost:${CARDCHAIN_PORT}657
+cardchaind config keyring-backend os
+cardchaind config chain-id cardtestnet-13
+cardchaind init "$MONIKER" --chain-id cardtestnet-13
 ```
 ### 🚧 Genesis ve adressbook
 ```
-wget -O $HOME/.Cardchain/config/genesis.json https://cardchain.crowdcontrol.network/files/genesis.json
+wget -O $HOME/.cardchaind/config/genesis.json https://cardchain.crowdcontrol.network/files/genesis.json
 
 ```
 ### 🚧 Seed ve Peer
 ```
 SEEDS=""
 PEERS="77dbc0da2b3f1d066676b316aa9bd97f4926b1ac@152.53.103.89:32056"
-sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.Cardchain/config/config.toml
+sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.cardchaind/config/config.toml
 ```
 ### 🚧 port
 ```
@@ -91,7 +91,7 @@ s%:9090%:${CARDCHAIN_PORT}090%g;
 s%:9091%:${CARDCHAIN_PORT}091%g;
 s%:8545%:${CARDCHAIN_PORT}545%g;
 s%:8546%:${CARDCHAIN_PORT}546%g;
-s%:6065%:${CARDCHAIN_PORT}065%g" $HOME/.Cardchain/config/app.toml
+s%:6065%:${CARDCHAIN_PORT}065%g" $HOME/.cardchaind/config/app.toml
 ```
 ### 🚧 port
 ```
@@ -100,30 +100,30 @@ s%:26657%:${CARDCHAIN_PORT}657%g;
 s%:6060%:${CARDCHAIN_PORT}060%g;
 s%:26656%:${CARDCHAIN_PORT}656%g;
 s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${CARDCHAIN_PORT}656\"%;
-s%:26660%:${CARDCHAIN_PORT}660%g" $HOME/.Cardchain/config/config.toml
+s%:26660%:${CARDCHAIN_PORT}660%g" $HOME/.cardchaind/config/config.toml
 ```
 ### 🚧 Puring
 ```
-sed -i -e "s/^pruning *=.*/pruning = \"nothing\"/" $HOME/.Cardchain/config/app.toml
-sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"100\"/" $HOME/.Cardchain/config/app.toml
-sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"50\"/" $HOME/.Cardchain/config/app.toml
+sed -i -e "s/^pruning *=.*/pruning = \"nothing\"/" $HOME/.cardchaind/config/app.toml
+sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"100\"/" $HOME/.cardchaind/config/app.toml
+sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"50\"/" $HOME/.cardchaind/config/app.toml
 ```
 ### 🚧 Gas ve diğer ayarlar
 ```
-sed -i 's|minimum-gas-prices =.*|minimum-gas-prices = "0.0ubpf"|g' $HOME/.Cardchain/config/app.toml
-sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.Cardchain/config/config.toml
-sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.Cardchain/config/config.toml
+sed -i 's|minimum-gas-prices =.*|minimum-gas-prices = "0.0ubpf"|g' $HOME/.cardchaind/config/app.toml
+sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.cardchaind/config/config.toml
+sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.cardchaind/config/config.toml
 ```
 ### 🚧 Servis Dosyası
 ```
-sudo tee /etc/systemd/system/Cardchaind.service > /dev/null <<EOF
+sudo tee /etc/systemd/system/cardchaind.service > /dev/null <<EOF
 [Unit]
 Description=Cardchain node
 After=network-online.target
 [Service]
 User=$USER
-WorkingDirectory=$HOME/.Cardchain
-ExecStart=$(which Cardchaind) start --home $HOME/.Cardchain
+WorkingDirectory=$HOME/.cardchaind
+ExecStart=/root/go/bin/cardchaind start --home $HOME/.cardchaind
 Restart=on-failure
 RestartSec=5
 LimitNOFILE=65535
@@ -138,29 +138,29 @@ EOF
 ### 🚧 Servisleri başlatalım
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable Cardchaind
-sudo systemctl restart Cardchaind && sudo journalctl -u Cardchaind -fo cat
+sudo systemctl enable cardchaind
+sudo systemctl restart cardchaind && sudo journalctl -u cardchaind -fo cat
 ```
 
 ### Cüzdan oluşturma yada import
 ```
-Cardchaind keys add cüzdan-adı
+cardchaind keys add cüzdan-adı
 ```
 OR import
 ```
-Cardchaind keys add cüzdan-adı --recover
+cardchaind keys add cüzdan-adı --recover
 ```
 
 ### Validator olusturma
 ```
-Cardchaind tx staking create-validator \
+cardchaind tx staking create-validator \
 --amount 1000000ubpf \
 --from $WALLET \
 --commission-rate 0.1 \
 --commission-max-rate 0.2 \
 --commission-max-change-rate 0.01 \
 --min-self-delegation 1 \
---pubkey $(Cardchaind tendermint show-validator) \
+--pubkey $(cardchaind tendermint show-validator) \
 --moniker "$MONIKER" \
 --identity "" \
 --details "" \
